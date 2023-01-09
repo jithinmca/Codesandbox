@@ -1,0 +1,28 @@
+{
+  "left" : [ {
+    "pathsInvolved" : [ "/countries/countriesdetail", "/countries/countrieslist" ],
+    "accessControl" : [ "all", "Development Administrator" ],
+    "onClick" : "navigate_to_page",
+    "valueChange" : true,
+    "currentNode" : "menuItem",
+    "label" : "COUNTRIES",
+    "page" : {
+      "name" : "countries List",
+      "sid" : "98e2ebd4-3b1a-4bfd-b294-c3b367e2a8b3",
+      "url" : "/countries/countrieslist"
+    },
+    "element" : "menuItem"
+  } ],
+  "topBarLeft" : [ ],
+  "topBarMiddle" : [ ],
+  "topBarRight" : [ {
+    "pathsInvolved" : [ ],
+    "languages" : [ {
+      "code" : "en",
+      "name" : "English"
+    } ],
+    "element" : "language"
+  } ],
+  "right" : [ ],
+  "tabs" : [ ]
+}

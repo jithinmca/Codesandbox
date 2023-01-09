@@ -1,0 +1,315 @@
+
+<div class="list countries-list">
+ <div class="wrokflow-simulate" *ngIf="isPrototype && workFlowEnabled">
+        <span class="arrow_box">Workflow Simulator</span>
+        <button pButton pRipple type="button" icon="pi pi-cog" class="p-button-rounded wrokflow-simulate-btn"  [fitContent]="false"  (click)="openWorkflowSimilator()"></button>
+    </div>
+   <div id="title-bar">
+    <div class="display">
+        <div class="col" class="page-title-bar" *ngIf="(isMobile && !isSearchFocused) || !isMobile">
+            <!-- <span class="pi pi-arrow-left back-action"></span> -->
+            <span class="page-title" [innerHTML]="pageViewTitle | translate"></span>
+        </div>
+        <div class="w-100"  *ngIf="showBreadcrumb"> <app-breadcrumb></app-breadcrumb></div>
+        <app-action-bar [buttons] = "leftActionBarConfig.children"
+(onBtnClick)='actionBarAction($event)'
+[style.order]="isMobile?'1':'0'"
+[isRowSelected]="isRowSelected" [isChildListpage]="isChildPage"
+[isListPage]="isList" [detailConditionalButtons]="conditionalActions">
+</app-action-bar><app-action-bar [buttons] = "rightActionBarConfig.children"
+(onBtnClick)='actionBarAction($event)'
+[style.order]="isMobile?'1':'0'"
+[isRowSelected]="isRowSelected" [isChildListpage]="isChildPage"
+[isListPage]="isList" [detailConditionalButtons]="conditionalActions">
+</app-action-bar><div class="p-0" id="search-container" [ngStyle]="{'width':isMobile && isSearchFocused? '100%':'50%' }">
+<div *ngIf="!isMobile" class="col global-search p-3">
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text show-advanced">
+<span class="pi pi-search icon-font"></span>
+<span (click)="toggleAdvancedSearch()" class="advancedsearch-icon" #toggleButton *ngIf="tableSearchConfig.showAdvancedSearch">
+<span class="fa fa-caret-down icon-font" ></span>
+</span>
+</span>
+</div>
+<input type="text" class="form-control" pInputText [placeholder]="'Search' | translate"
+(keydown)="onKeydown($event)" [(ngModel)]="filter.globalSearch" />
+<div class="input-group-append ">
+<span (click)="clearAllFilters()" class="input-group-text px-3 py-3 cursor-pointer">
+<i class="fa-solid fa-filter-circle-xmark icon-font "></i>
+</span>
+</div>
+</div>
+</div>
+
+<div class="d-flex" *ngIf="isMobile">
+<div *ngIf="isMobile" class="search-mobile-container col global-search">
+<button class="pi pi-search icon-font search-btn1" (click)="focus()"></button>
+<!-- <span>{{isSearchFocused}}</span> -->
+<input placeholder='Search' id="mobile-search-icon" class='js-search open' type="text" (keydown)="onKeydown($event)"
+[(ngModel)]="filter.globalSearch" [ngClass]="{'open':isSearchFocused}">
+<!-- <span [ngClass]="{'search-close':!isSearchFocused}" class="pi pi-times icon-font " style="right:50px" (click)="clearFilters()"></span> -->
+</div>
+<div class="input-group-append" *ngIf="!isSearchFocused && tableSearchConfig.showAdvancedSearch">
+<span class="input-group-text pi pi-sliders-h icon-font px-3 py-3 cursor-pointer"
+(click)="toggleAdvancedSearch()" #toggleButton></span>
+</div>
+<div class="input-group-append" *ngIf="isSearchFocused">
+<span class="input-group-text pi pi-times icon-font px-3 py-3 cursor-pointer"
+(click)="clearFilters()" ></span>
+</div>
+</div>
+
+<div class="advanced-search ev-detail-view" *ngIf="(tableSearchConfig.showAdvancedSearch && showAdvancedSearch)" #menu>
+<span class="pr-3 pt-0 adv-search-header" [innerHTML]="'Advanced Search'| translate"></span>
+<span style="float:right" class="cursor-pointer"><i class="pi pi-times" (click)="toggleAdvancedSearch()"></i></span>
+<form [formGroup]="tableSearchControls" (ngSubmit)="advancedSearch()" class="ev-form">
+<div class="row form-body">
+<div class="form-row vg-col-2">
+<div class="form-col" [hidden]="hiddenFields.countryCode" id="countryCode">
+    <div class="field-row"  [ngClass]="{'required': tableSearchFieldConfig?.countryCode?.isRequired, 'error':inValidFields.countryCode}">
+        <label for="countryCode" class="col-form-label countryCode-label" [textContent]=" 'COUNTRY_CODE'|translate "></label>
+        <span class="info-bubble" *ngIf="tableSearchFieldConfig?.countryCode?.infoBubble"   [pTooltip]="tableSearchFieldConfig?.countryCode?.infoBubble || ''"><i class="fa fa-circle-info"></i></span>
+        <input type="text " pInputText class="form-control " id="countryCode " formControlName="countryCode" [placeholder]="tableSearchFieldConfig?.countryCode?.placeHolder || ''"
+[maxlength]="tableSearchFieldConfig?.countryCode?.maxLength" />
+        <div class="fst-italic fs-5 help-text">{{tableSearchFieldConfig?.countryCode?.helpText || ''}}</div>
+    </div>
+</div><div class="form-col" [hidden]="hiddenFields.countryName" id="countryName">
+    <div class="field-row"  [ngClass]="{'required': tableSearchFieldConfig?.countryName?.isRequired, 'error':inValidFields.countryName}">
+        <label for="countryName" class="col-form-label countryName-label" [textContent]=" 'COUNTRY_NAME'|translate "></label>
+        <span class="info-bubble" *ngIf="tableSearchFieldConfig?.countryName?.infoBubble"   [pTooltip]="tableSearchFieldConfig?.countryName?.infoBubble || ''"><i class="fa fa-circle-info"></i></span>
+        <input type="text " pInputText class="form-control " id="countryName " formControlName="countryName" [placeholder]="tableSearchFieldConfig?.countryName?.placeHolder || ''"
+[maxlength]="tableSearchFieldConfig?.countryName?.maxLength" />
+        <div class="fst-italic fs-5 help-text">{{tableSearchFieldConfig?.countryName?.helpText || ''}}</div>
+    </div>
+</div><div class="form-col" [hidden]="hiddenFields.currency" id="currency">
+    <div class="field-row"  [ngClass]="{'required': tableSearchFieldConfig?.currency?.isRequired, 'error':inValidFields.currency}">
+        <label for="currency" class="col-form-label currency-label" [textContent]=" 'CURRENCY'|translate "></label>
+        <span class="info-bubble" *ngIf="tableSearchFieldConfig?.currency?.infoBubble"   [pTooltip]="tableSearchFieldConfig?.currency?.infoBubble || ''"><i class="fa fa-circle-info"></i></span>
+        <input type="text " pInputText class="form-control " id="currency " formControlName="currency" [placeholder]="tableSearchFieldConfig?.currency?.placeHolder || ''"
+[maxlength]="tableSearchFieldConfig?.currency?.maxLength" />
+        <div class="fst-italic fs-5 help-text">{{tableSearchFieldConfig?.currency?.helpText || ''}}</div>
+    </div>
+</div>
+</div>
+</div>
+<div class="search-actions">
+<div>
+<button type="button" class="btn btn-secondary search-btn" (click)="clearFilterValues()">Clear
+Filter</button>
+</div>
+<div >
+<div class="btn-group mr-0" role="group">
+<button type="button" class="btn btn-secondary search-btn"
+(click)="toggleAdvancedSearch()">Cancel</button>
+<button type="submit" class="btn btn-primary search-btn">Search</button>
+</div>
+</div>
+</div>
+
+</form>
+</div>
+</div>
+    </div>
+</div><div class="row" id="filter-container" *ngIf="quickFilterConfig?.children?.length > 0">
+    <div class="quick-filters ev-detail-view">
+        <form [formGroup]="quickFilterControls">
+             <div class="row align-filter" [ngClass]="quickFilterConfig.style ==='style_2'? 'rowfiltercolumnfilter':'columnfilter'">
+                
+            </div>
+        </form>
+    </div>
+</div><div id="table-container" class="viewAs-{{tableConfig.viewAs}}" [ngClass]="getClass()">
+<div *ngIf="tableConfig.toggleColumns" class="table-settings">
+            <div (click)="openSettings()">
+                <em class="fa-solid fa-gear settings-icon-color"></em>
+            </div>
+            <div class=" tbl-ctx-menu" *ngIf="showMenu">
+                <button class="btn btn-link btn-sm" id="resetGridSettings" (click)="clearColumnReorder()"> Reset
+                    Column
+                    Order</button>
+                <ul>
+                    <li data="{{column.field}}" *ngFor="let column of tableConfig.children">
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" [id]="column.field" [value]="column.field"
+                                [checked]="column.checked">
+                            <label class="form-check-label" for="{{column.field}}">{{column.label |
+                                translate}}</label>
+                        </div>
+                    </li>
+                </ul>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary btn-sm" id="gridCtxMenuCancel"
+                        (click)="cancelColumnOptions()">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="gridCtxMenuOkay"
+                        (click)="saveColumns()">Ok</button>
+                </div>
+            </div>
+        </div>
+    <p-table [value]="gridData" dataKey="sid" [scrollable]="true" [columns]="selectedColumns" scrollHeight="flex"
+        rowHover="true" responsive="true" responsiveLayout="scroll"
+        [customSort]="(tableConfig.sorting ==='No'?'false':'true')"
+        [sortMode]="tableConfig.sorting ==='multiple_column'?'multiple':(tableConfig.sorting ==='single_column')?'single':'none'"
+        [selectionMode]="(tableConfig.recordSelection ==='multiple_records')?'multiple':'single'"
+        [(selection)]="selectedValues" [resizableColumns]="tableConfig.columnResize"
+(onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowSelect($event)" 
+        styleClass="table-container-{{tableConfig.tableStyle && !isMobile? tableConfig.tableStyle :'style_1'}}" [stateStorage]="'local'" stateKey="countries-list" [columnResizeMode]="tableConfig.resizeMode ==='expand_mode'?'expand':'fit'" >
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th scope="col" *ngIf="(tableConfig.recordSelection ==='multiple_records')" [style.maxWidth]="'4rem'"
+                    [style.borderRight]="tableConfig.showGridlines ? '1px solid #e3e5e7':''"
+                    [style.borderBottom]="tableConfig.striped && tableConfig.tableStyle === 'style_2'? '1px solid #e3e5e7':''"
+                    pFrozenColumn [frozen]="tableConfig.leftFreezeUptoColumn>0">
+                    <p-tableHeaderCheckbox (click)="onRowSelect($event)"></p-tableHeaderCheckbox>
+                </th>
+
+                <th [style.maxWidth]="'4rem'" *ngIf="tableConfig.recordSelection ==='single_record_only'"
+                    [style.borderRight]="tableConfig.showGridlines ? '1px solid #e3e5e7':''"
+                    [style.borderBottom]="tableConfig.striped && tableConfig.tableStyle === 'style_2'? '1px solid #e3e5e7':''"
+                    pFrozenColumn [frozen]="tableConfig.leftFreezeUptoColumn>0" [alignFrozen]="'left'">
+                </th>
+                <th *ngIf="tableConfig.rowGroup ==='rowspan_grouping'" [style.maxWidth]="'15rem'" pFrozenColumn
+                    [frozen]="tableConfig.leftFreezeUptoColumn>0" [alignFrozen]="'left'">
+                </th>
+                <th pResizableColumn pReorderableColumn scope="col" [pSortableColumn]="col.name" [style.width]="col.width" pFrozenColumn
+                    [frozen]="((tableConfig.leftFreezeUptoColumn && tableConfig.leftFreezeUptoColumn > i) || (rightFreezeColums && rightFreezeColums <= i))"
+                    [alignFrozen]="tableConfig.leftFreezeUptoColumn >i?'left':(rightFreezeColums <= i)?'right':''"
+                    (click)="sort($event,col.name)" *ngFor="let col of columns let i = index;"
+                    [style.borderRight]="tableConfig.showGridlines ? '1px solid #e3e5e7':''" style="overflow:hidden">
+                    <span [innerHTML]="col.label | translate"></span>
+                    <p-sortIcon [field]="col.name" *ngIf="(tableConfig.sorting ==='No'?'false':'true')"></p-sortIcon>
+                </th>
+
+                <th *ngIf="tableConfig.detailPageNavigation ==='click_on_edit_icon' || isMobile" class="edit-icon">
+                 </th>
+
+            </tr>
+        </ng-template>
+
+        <!-- rowGroup - subHeader -->
+
+      <ng-template pTemplate="groupheader" let-data let-rowIndex="rowIndex" let-expanded="expanded">
+                <tr pRowGroupHeader class="sub-header-container" [ngClass]="{'mb-3':!isMobile}">
+                    <td colspan="5">
+                        <!-- row-group - Expansion -->
+                        <button *ngIf="tableConfig.rowGroup ==='expandable_row_grouping'" type="button" pButton pRipple
+                            [pRowToggler]="data" class="p-button-text p-button-rounded p-button-plain mr-2"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        <span class="font-bold ml-2 list-sub-header"
+                            [innerHTML]="(data[subHeader[0]] && data[subHeader[1]])? (data[subHeader[0]][subHeader[1]] | translate) :(data[subHeader[0]]|translate)">   </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+        <ng-template pTemplate="{{tableConfig.rowGroup ==='expandable_row_grouping'?'rowexpansion':'body'}}" let-data
+            let-columns="columns" let-rowIndex="rowIndex" let-rowgroup="rowgroup" let-rowspan="rowspan">
+            <tr [ngClass]="((tableConfig.rowSpacing ==='small' && tableConfig.tableStyle ==='style_1')?'margin-sm':(tableConfig.rowSpacing ==='medium' && tableConfig.tableStyle ==='style_1')?'margin-md':(tableConfig.rowSpacing ==='large' && tableConfig.tableStyle ==='style_1')?'margin-lg':'')"
+                class="{{tableConfig.rowHeight}} {{tableConfig.borderStyle}} {{((tableConfig.hoverStyle ==='line')?'border-line':(tableConfig.hoverStyle ==='box')?'border-box':'')}}">
+                <!-- selection -Multiple -->
+                <td [style.maxWidth]="'4rem'" *ngIf="tableConfig.recordSelection ==='multiple_records'"
+                    [style.borderRight]="tableConfig.showGridlines ? '1px solid #e3e5e7':''"
+                    [style.borderBottom]="tableConfig.striped && tableConfig.tableStyle === 'style_2'? '1px solid #e3e5e7':''"
+                    pFrozenColumn [frozen]="tableConfig.leftFreezeUptoColumn>0" [alignFrozen]="'left'" class="record-selection">
+                    <p-tableCheckbox [value]="data"></p-tableCheckbox>
+                </td>
+
+                <!-- selection - Single -->
+                <td [style.maxWidth]="'4rem'" *ngIf="tableConfig.recordSelection ==='single_record_only'"
+                    [style.borderRight]="tableConfig.showGridlines ? '1px solid #e3e5e7':''"
+                    [style.borderBottom]="tableConfig.striped && tableConfig.tableStyle === 'style_2'? '1px solid #e3e5e7':''"
+                    pFrozenColumn [frozen]="tableConfig.leftFreezeUptoColumn>0" [alignFrozen]="'left'" class="record-selection">
+                    <p-tableRadioButton [value]="data"></p-tableRadioButton>
+                </td>
+
+                <!-- rowGroup-row Span -->
+
+                <td *ngIf="tableConfig.rowGroup ==='rowspan_grouping'" [style.maxWidth]="'15rem'"
+                    [attr.rowspan]="rowspan"
+                    [innerHTML]="(data[subHeader[0]] && data[subHeader[1]])? data[subHeader[0]][subHeader[1]]:data[subHeader[0]]"
+                    pFrozenColumn [frozen]="tableConfig.leftFreezeUptoColumn>0" [alignFrozen]="'left'">
+                </td>
+
+                <td *ngFor="let col of columns let i = index;" pFrozenColumn [style.width]="col.width"
+                    style="overflow:hidden" [frozen]="(tableConfig.leftFreezeUptoColumn >i) || (rightFreezeColums <= i)"
+                    (click)="!tableConfig.inlineEditing && tableConfig.detailPageNavigation === 'click_of_the_row' && onUpdate(data['sid'])"
+                    [alignFrozen]="tableConfig.leftFreezeUptoColumn >i?'left':(rightFreezeColums <= i)?'right':''"
+                    [style.borderRight]="tableConfig.showGridlines ? '1px solid #e3e5e7':''"
+                    [style.borderBottom]="tableConfig.striped && tableConfig.tableStyle === 'style_2'? '1px solid #e3e5e7':''"
+                    class={{col.name}}
+                    [ngClass]="(conditionalFormatting(col.conditionalStyling, data[col.name])? (col.conditionalStyling[data[col.name]]).class:'')">
+
+                    
+                    <span *ngIf="!tableConfig.inlineEditing"
+                        class="{{col.conditionalStyling?.hasOwnProperty([data[col.name]])?'conditional conditional-container':''}} ellipsis white-space-nowrap">
+                        <span *ngIf="col.conditionalStyling?.hasOwnProperty([data[col.name]])"
+                            class="{{(col.conditionalStyling[data[col.name]].style.icon?.icon?.label)}} conditional-icon">
+                        </span>
+                        <span
+                            *ngIf="(!col.conditionalStyling?.hasOwnProperty([data[col.name]])) || (col.conditionalStyling?.hasOwnProperty([data[col.name]]) && col.conditionalStyling[data[col.name]].style.showText)">
+                            <ng-container
+                               *ngTemplateOutlet="(col.formatDisplay)?formattedElements:(col.multipleValues)? multiple : tableElements; context: { col: col, data:data }">
+                            </ng-container>
+                        </span>
+                    </span>
+                  <span *ngIf="isMobile &&col.showLabel && tableConfig.viewAs ==='card'" class="header-label ellipsis white-space-nowrap"> {{col.label}}</span>
+                </td>
+                <td *ngIf="tableConfig.detailPageNavigation ==='click_on_edit_icon' || isMobile"
+                    class="edit-icon" [ngClass]="{'position-absolute end-0':tableConfig.viewAs ==='card'}">
+                        <button pButton pRipple type="button" icon="pi pi-angle-right" (click)="onUpdate(data['sid'])"
+                            class="p-button-text"></button>
+                    </td>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+             <tr *ngIf="!isPageLoading">
+                    <td colspan="5"
+                        [innerHTML]="tableConfig.emptymessage ? tableConfig.emptymessage:'No records found'">
+                    </td>
+                </tr>
+        </ng-template>
+
+    </p-table>
+</div>
+
+<!-- Multiple Elements -->
+
+<ng-template #multiple let-col="col" let-data="data" let-type="col.uiType">
+
+    <span [innerHTML]="onFormatMultipleValues(type,data[col.name])"></span>
+
+</ng-template>
+
+ <!-- Formatted Elements -->
+    <ng-template #formattedElements let-col="col" let-data="data" let-type="col.uiType">
+
+        <span [innerHTML]="(getFormattedContent(col,data))|translate"></span>
+
+    </ng-template>
+
+
+<!-- Table Elements -->
+<ng-template #tableElements let-col="col" let-data="data" let-type="col.uiType">
+
+    <span
+        *ngIf="formattableElements.includes(type) || (col.fieldType === 'string' && type !=='link') || col.fieldType === 'any' || type =='checkboxgroup'"
+       [innerHTML]="(onFormatColumns(col,data))|translate">
+    </span>
+
+    <img *ngIf="type === GRID_ELEMENTS.IMAGE" [src]="data[col.name]" alt="image" [ngStyle]="" />
+
+    <a *ngIf="type === GRID_ELEMENTS.LINK" [href]="data[col.name]" [textContent]="'Link'"></a>
+
+    <i *ngIf="type === GRID_ELEMENTS.ICON" class="data[col.name]"></i>
+
+    <span *ngIf="type === GRID_ELEMENTS.BOOLEAN ||  col.fieldType === GRID_ELEMENTS.BOOLEAN ">
+        <i *ngIf="data[col.name] === true || data[col.name] === 'yes'" class="pi pi-check text-success mr-2"></i>
+        <i *ngIf="data[col.name] === false|| data[col.name] === 'no'" class="pi pi-times text-danger"></i>
+    </span>
+
+    <p-tag *ngIf="type === GRID_ELEMENTS.TAG" value="{{data[col.name]}}"></p-tag>
+
+</ng-template>
+</div>

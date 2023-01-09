@@ -1,0 +1,44 @@
+:host ::ng-deep {
+    width: 100%;
+    .link-wrap{
+        margin-left: -10px;
+        margin-top: -10px;
+
+        .p-button-link{
+            background-color: transparent;
+            font-weight: 600;
+           
+            .p-button-label{
+                color: #1a73e8;
+            }
+        }
+        .empty-link{
+            visibility: hidden;
+        }
+        .link-edit{
+            background-color: transparent;
+            border: 0;
+        }
+        .p-button:enabled:hover{
+            color:#1a73e8;
+        }
+        
+        .p-button.p-button-icon-only.p-button-rounded{
+            width: 3rem;
+        }
+    }
+    
+    .link-edit-wrap{
+        display: flex;
+        
+    
+    }
+    .col-form-label{width: 100%;}
+
+    .disabled{
+        border: 0.13rem solid #e9ecef;
+        border-radius: 0.8rem;
+        margin-top: -1px;
+        margin-left: 0px;
+    }
+}

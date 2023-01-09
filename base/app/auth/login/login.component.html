@@ -1,0 +1,52 @@
+<div class="mx-auto app-login-box col-md-12">
+    <div class="ev-notify">
+        <p-messages>
+
+        </p-messages>
+    </div>
+    <div class="app-logo-inverse mx-auto mb-3"></div>
+    <div class="modal-dialog w-100 mx-auto">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="h5 modal-title text-center">
+                    <h4 class="mt-2">
+                        <div translate>LOGIN</div>
+                        <span></span>
+                    </h4>
+                </div>
+                <form class="" [formGroup]="form" #detailForm>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label class="d-none emailFieldName" translate>EMAIL</label>
+                                <input type="text" pInputText placeholder="{{'EMAIL' | translate}}" class="form-control" id="id" formControlName="email" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 required">
+                            <div class="position-relative form-group">
+                                <label class="d-none passwordFieldName" translate>PASSWORD</label>
+                                <input type="text" pInputText placeholder="{{'PASSWORD' | translate}}" class="form-control" id="id" formControlName="password" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row position-relative form-check">
+                        <label class="d-none rememberMeFieldName" translate>REMEMBER_ME_TXT</label>
+                        <p-checkbox [formControl]="form.controls['rememberMe']" label="{{'REMEMBER_ME_TXT' | translate}}" binary="true"></p-checkbox>
+                    </div>
+                </form>
+                <!-- <div class="divider"></div> -->
+                <!-- <h6 class="mb-0">No account? <a href="javascript:void(0);" class="text-primary">Sign up now</a></h6> -->
+            </div>
+            <div class="modal-footer clearfix">
+                <div class="float-left">
+                    <a href="javascript:void(0);" class="btn-lg btn btn-link text-primary" (click)="loadForgotPasswordPage()" translate>RECOVER_PASSWORD</a>
+                </div>
+                <div class="float-right">
+                    <button class="btn btn-primary btn-lg" (click)="authenticate()" translate>LOGIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center text-white opacity-8 mt-3" translate>PRIVACY_STATEMENT</div>
+    <button class="d-none" type="submit" #submitBtn></button>
+</div>
